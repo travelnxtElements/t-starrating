@@ -67,24 +67,24 @@ A Polymer element for star ratings.
 <dom-module id="t-starrating">
     <template>
         <div class="t-starrating-wrapper">
-            <template is="dom-if" if="{{withTotal(showtotals)}}">
+            <template is="dom-if" if="[[showTotals]]">
                 <span class="totals"><span>{{rate}}</span>/<span>{{stars}}</span></span>
             </template>
-            <template id="star" is="dom-repeat" items="{{currentStars}}">
-                <span class$="{{isActive(index)}}" on-tap="_setRate" data-index$="{{index}}">
-        <template is="dom-if" if="{{isCustom()}}">
-          <paper-icon-button icon="{{customcharicon}}"></paper-icon-button>
-        </template>
-        <template is="dom-if" if="{{isStar(icon)}}">
-          <paper-icon-button icon="star"></paper-icon-button>
-        </template>
-        <template is="dom-if" if="{{isHeart(icon)}}">
-          <paper-icon-button icon="favorite"></paper-icon-button>
-        </template>
-        <template is="dom-if" if="{{isFace(icon)}}">
-          <paper-icon-button icon="face"></paper-icon-button>
-        </template>
-      </span>
+            <template id="star" is="dom-repeat" items="{{_currentStars}}">
+                <span class$="{{_isActive(index)}}" on-tap="_setRate" data-index$="{{index}}">
+                    <template is="dom-if" if="{{_isCustom()}}">
+                        <paper-icon-button icon="{{customcharicon}}"></paper-icon-button>
+                    </template>
+                    <template is="dom-if" if="{{_isStar(icon)}}">
+                        <paper-icon-button icon="star"></paper-icon-button>
+                    </template>
+                    <template is="dom-if" if="{{_isHeart(icon)}}">
+                        <paper-icon-button icon="favorite"></paper-icon-button>
+                    </template>
+                    <template is="dom-if" if="{{_isFace(icon)}}">
+                        <paper-icon-button icon="face"></paper-icon-button>
+                    </template> 
+                </span>
             </template>
         </div>
     </template>
@@ -129,19 +129,29 @@ A Polymer element for star ratings.
                 value: 0,
                 notify: true
             },
-            showtotals: {
+
+
+            /**
+             * Set this to true to show the total number
+             */
+            showTotals: {
                 type: Boolean,
                 value: false,
                 notify: true
             },
+
+            /**
+             * set This to true to not allow any changes from User
+             */
             readonly: {
                 type: Boolean,
                 value: false
             },
-            currentStars: {
+
+            _currentStars: {
                 type: Object,
                 value: []
-            },
+            }
         },
 
         ready: function() {
@@ -149,28 +159,27 @@ A Polymer element for star ratings.
             for (var i = this.stars - 1; i >= 0; i--) {
                 tempArr.push(i + 1);
             };
-            this.currentStars = tempArr;    
+            this._currentStars = tempArr;    
         },
-        isCustom: function() {
+        
+        _isCustom: function() {
             return this.customcharicon;
         },
-        isStar: function(icon) {
+        _isStar: function(icon) {
             return icon == 'star' && this.customcharicon == null;
         },
-        isHeart: function(icon) {
+        _isHeart: function(icon) {
             return icon == 'heart' && self.customcharicon == null;
         },
-        isFace: function(icon) {
+        _isFace: function(icon) {
             return icon == 'face' && this.customcharicon == null;
         },
-        isActive: function(index) {
+        _isActive: function(index) {
             if ((index - this.stars) * -1 == this.rate) {
                 return "active";
             }
         },
-        withTotal: function(showtotals) {
-            return showtotals;
-        },
+
         _setRate: function(e) {
             deep = Polymer.dom(this.root);
             if (!this.readonly) {
