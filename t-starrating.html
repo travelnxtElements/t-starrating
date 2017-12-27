@@ -16,7 +16,10 @@ A Polymer element for star ratings.
 @status alpha
 @url cmartinezv.github.io/webcomponents
 -->
-<style>
+
+<dom-module id="t-starrating">
+    <template>
+        <style>
 :host {
     display: block;
 }
@@ -64,8 +67,7 @@ A Polymer element for star ratings.
     opacity: 1 !important;
 }
 </style>
-<dom-module id="t-starrating">
-    <template>
+
         <div class="t-starrating-wrapper">
             <template is="dom-if" if="[[showTotals]]">
                 <span class="totals"><span>{{rate}}</span>/<span>{{stars}}</span></span>
